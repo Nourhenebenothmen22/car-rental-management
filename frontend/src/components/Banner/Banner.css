@@ -1,0 +1,153 @@
+.cta-banner {
+  padding: 100px 0;
+}
+
+.banner-container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.banner-card {
+  background: var(--gradient-primary);
+  border-radius: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 80px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
+.banner-content {
+  flex: 1;
+  color: var(--white);
+  position: relative;
+  z-index: 2;
+}
+
+.banner-content .badge {
+  display: inline-block;
+  padding: 6px 16px;
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.banner-content h2 {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 20px;
+  line-height: 1.2;
+}
+
+.banner-content p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  margin-bottom: 32px;
+  max-width: 450px;
+}
+
+.banner-btns {
+  display: flex;
+  gap: 15px;
+}
+
+.banner-btns button {
+  padding: 14px 28px;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: var(--transition);
+}
+
+.primary-btn {
+  background-color: var(--white);
+  color: var(--primary-color);
+  border: none;
+}
+
+.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(255, 255, 255, 0.2);
+}
+
+.secondary-btn {
+  background-color: transparent;
+  color: var(--white);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.secondary-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: var(--white);
+}
+
+.banner-img {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  position: relative;
+  z-index: 2;
+}
+
+.banner-img img {
+  max-width: 120%;
+  height: auto;
+  transform: translateX(10%);
+}
+
+.banner-wrapper::after {
+  content: '';
+  position: absolute;
+  top: -20%;
+  right: -10%;
+  width: 60%;
+  height: 140%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+  z-index: 1;
+}
+
+@media (max-width: 1024px) {
+  .banner-card {
+    height: auto;
+    flex-direction: column;
+    padding: 60px 40px;
+    text-align: center;
+  }
+  
+  .banner-content p {
+    margin: 0 auto 30px;
+  }
+  
+  .banner-btns {
+    justify-content: center;
+  }
+  
+  .banner-img {
+    margin-top: 40px;
+  }
+  
+  .banner-img img {
+    transform: none;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .banner-content h2 {
+    font-size: 2.2rem;
+  }
+  
+  .banner-btns {
+    flex-direction: column;
+  }
+}

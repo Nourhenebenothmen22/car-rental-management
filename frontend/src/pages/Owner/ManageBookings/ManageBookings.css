@@ -1,0 +1,169 @@
+.manage-bookings {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.header-filters {
+  display: flex;
+  gap: 10px;
+}
+
+.filter-pill {
+  padding: 8px 18px;
+  border-radius: 30px;
+  border: 1px solid #e2e8f0;
+  background: white;
+  color: #64748b;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filter-pill.active {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+.bookings-table-wrapper {
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px; /* Stronger min-width for detailed table */
+}
+
+.admin-table th {
+  text-align: left;
+  padding: 15px;
+  color: #64748b;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.admin-table td {
+  padding: 18px 15px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 0.9rem;
+}
+
+.id-cell {
+  font-family: monospace;
+  font-weight: 700;
+  color: #94a3b8;
+}
+
+.car-info-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.car-info-cell img {
+  width: 50px;
+  height: 35px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.car-name {
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 2px;
+}
+
+.car-type {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.price-cell-admin {
+  font-weight: 800;
+  color: #1e293b;
+}
+
+.status-tag {
+  padding: 5px 12px;
+  border-radius: 30px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.status-tag.confirmed {
+  background: #ecfdf5;
+  color: #10b981;
+}
+
+.status-tag.pending {
+  background: #fffbeb;
+  color: #f59e0b;
+}
+
+.action-btns {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.btn-action {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  background: white;
+  font-size: 0.9rem;
+}
+
+.btn-action.view {
+  color: #64748b;
+}
+
+.btn-action.view:hover {
+  background: #f1f5f9;
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-action.approve {
+  color: #10b981;
+}
+
+.btn-action.approve:hover {
+  background: #ecfdf5;
+  color: white;
+  background-color: #10b981;
+  border-color: #10b981;
+}
+
+.btn-action.reject {
+  color: #ef4444;
+}
+
+.btn-action.reject:hover {
+  background: #fef2f2;
+  color: white;
+  background-color: #ef4444;
+  border-color: #ef4444;
+}
+
+.btn-action:hover i {
+  transform: scale(1.1);
+}

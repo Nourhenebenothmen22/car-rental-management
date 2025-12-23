@@ -1,0 +1,4 @@
+/* Register page reuses the refined glassmorphism styles from Login.css */
+.register-page .auth-main-btn {
+  margin-top: 5px; /* Slight adjustment for registration */
+}
