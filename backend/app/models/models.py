@@ -15,7 +15,7 @@ class User(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     cars = relationship("Car", back_populates="owner")
-    bookings = relationship("Booking", back_populates="user")
+    bookings = relationship("Booking", back_populates="user", foreign_keys="Booking.user_id")
 
 class Car(Base):
     __tablename__ = "cars"
@@ -53,4 +53,5 @@ class Booking(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     car = relationship("Car", back_populates="bookings")
-    user = relationship("User", back_populates="bookings")
+    user = relationship("User", back_populates="bookings", foreign_keys=[user_id])
+    owner = relationship("User", foreign_keys=[owner_id])

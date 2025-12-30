@@ -1,7 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.core.database import engine, Base
+from fastapi.staticfiles import StaticFiles
+from app.core.database import engine
 from app.models import models
+from app.api import cars, users, bookings, uploads
 
 # Create database tables
 models.Base.metadata.create_all(bind=engine)
@@ -11,6 +13,15 @@ app = FastAPI(
     description="Backend API for managing car rentals, users, and bookings.",
     version="1.0.0"
 )
+
+# Include Routers
+app.include_router(cars.router)
+app.include_router(users.router)
+app.include_router(bookings.router)
+app.include_router(uploads.router)
+
+# Mount uploads directory to serve static files
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 # Configure CORS
 origins = [
