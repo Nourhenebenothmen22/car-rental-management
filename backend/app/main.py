@@ -24,16 +24,9 @@ app.include_router(uploads.router)
 app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 # Configure CORS
-origins = [
-    "http://localhost:3000", # Common React/Frontend port
-    "http://127.0.0.1:3000",
-    "http://localhost:5173", # Default Vite port
-    "http://127.0.0.1:5173",
-]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"], # Permissive for development
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

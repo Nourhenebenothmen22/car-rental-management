@@ -14,6 +14,8 @@ import AddCar from './pages/Owner/AddCar/AddCar';
 import ManageBookings from './pages/Owner/ManageBookings/ManageBookings';
 import Unauthorized from './pages/unauthorized/Unauthorized';
 
+import ProtectedRoute from './components/auth/ProtectedRoute';
+
 function App() {
   return (
     <BrowserRouter>
@@ -28,11 +30,25 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/cars" element={<Cars />} />
           <Route path="/car/:id" element={<CarDetail />} />
-          <Route path="/my-bookings" element={<MyBookings />} />
+          <Route 
+            path="/my-bookings" 
+            element={
+              <ProtectedRoute role="user">
+                <MyBookings />
+              </ProtectedRoute>
+            } 
+          />
         </Route>
 
         {/* Owner/Admin routes */}
-        <Route path="/owner" element={<AdminLayout />}>
+        <Route 
+          path="/owner" 
+          element={
+            <ProtectedRoute role="owner">
+              <AdminLayout />
+            </ProtectedRoute>
+          }
+        >
           <Route index element={<OwnerDashboard />} />
           <Route path="dashboard" element={<OwnerDashboard />} />
           <Route path="manage-cars" element={<ManageCars />} />

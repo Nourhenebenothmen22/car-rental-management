@@ -17,7 +17,7 @@ function Home() {
       <CarSearch />
       
       <div className="gradient-section">
-        <CarList />
+        <CarList limit={6} />
         <About />
         <Banner />
         <Testimonial />

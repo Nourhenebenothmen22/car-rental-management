@@ -2,13 +2,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './CarCard.css';
 import { assets } from '../../assets/assets';
+import { getImageUrl } from '../../services/api';
 
 function CarCard({ car }) {
   return (
     <div className="car-card-premium">
       <div className="car-card-visual">
-        <div className="visual-glow"></div>
-        <img src={car.image} alt={`${car.brand} ${car.model}`} className="car-image-main" />
+        <img src={getImageUrl(car.image)} alt={`${car.brand} ${car.model}`} className="car-image-main" />
         <div className="category-tag">{car.category}</div>
       </div>
       
@@ -42,10 +42,10 @@ function CarCard({ car }) {
         <div className="card-action-footer">
           <div className="price-tag">
             <span className="currency">$</span>
-            <span className="value">{car.pricePerDay}</span>
+            <span className="value">{car.price_per_day || car.pricePerDay}</span>
             <span className="duration">/day</span>
           </div>
-          <Link to={`/car/${car._id}`} className="btn-rent-vivid">
+          <Link to={`/car/${car.id || car._id}`} className="btn-rent-vivid">
             <span className="btn-text">Rent Now</span>
             <i className="fas fa-chevron-right"></i>
           </Link>

@@ -1,9 +1,47 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Login.css';
 import { assets } from '../../../assets/assets';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuthStore } from '../../../store/auth.store';
 
 function Login() {
+  const [data, setData] = useState({
+    email: '',
+    password: ''
+  });
+  const [error, setError] = useState("");
+  // Using local loading state for UI feedback during the async action
+  const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
+  const { loginAction } = useAuthStore();
+  
+  const handleChange = (e) => {
+    setData({ ...data, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    try {
+      const user = await loginAction(data);
+      
+      // Redirection based on role
+      if (user.role === 'owner') {
+        navigate('/owner');
+      } else {
+        navigate('/');
+      }
+    } catch (err) {
+
+      setError(err.response?.data?.detail || "Invalid email or password");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="auth-wrapper">
       <div className="auth-overlay"></div>
@@ -17,13 +55,29 @@ function Login() {
           <p>Sign in to continue your journey</p>
         </div>
 
-        <form className="auth-form-refined" onSubmit={(e) => e.preventDefault()}>
+        {error && <div className="auth-error-msg" style={{ color: 'red', marginBottom: '10px', textAlign: 'center' }}>{error}</div>}
+
+        <form className="auth-form-refined" onSubmit={handleSubmit}>
           <div className="input-field">
-            <input type="email" placeholder="Email Address" required />
+            <input 
+              type="email" 
+              placeholder="Email Address" 
+              name='email' 
+              value={data.email}
+              onChange={handleChange}
+              required 
+            />
           </div>
 
           <div className="input-field">
-            <input type="password" placeholder="Password" required />
+            <input 
+              type="password" 
+              placeholder="Password" 
+              name='password' 
+              value={data.password}
+              onChange={handleChange}
+              required 
+            />
           </div>
 
           <div className="auth-meta">
@@ -35,7 +89,9 @@ function Login() {
             <Link to="/forgot">Forgot Password?</Link>
           </div>
 
-          <button type="submit" className="auth-main-btn">Sign In</button>
+          <button type="submit" className="auth-main-btn" disabled={loading}>
+            {loading ? "Signing In..." : "Sign In"}
+          </button>
         </form>
 
         <div className="auth-or-line">

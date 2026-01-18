@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "./Navbar.css";
-import { assets } from "../../assets/assets";
 import { Link, useLocation } from "react-router-dom";
+import { useAuthStore } from "../../store/auth.store";
 
 function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
+  
+  const { isAuthenticated, user, logout } = useAuthStore();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -45,24 +47,40 @@ function Navbar() {
               <i className="fas fa-car-side"></i> Explore Cars
             </Link>
           </li>
-          <li>
-            <Link
-              to="/my-bookings"
-              className={location.pathname === "/my-bookings" ? "active" : ""}
-              onClick={() => setMenuOpen(false)}
-            >
-              <i className="fas fa-calendar-alt"></i> My Bookings
-            </Link>
-          </li>
+          {user?.role !== 'owner' && (
+            <li>
+              <Link
+                to="/my-bookings"
+                className={location.pathname === "/my-bookings" ? "active" : ""}
+                onClick={() => setMenuOpen(false)}
+              >
+                <i className="fas fa-calendar-alt"></i> My Bookings
+              </Link>
+            </li>
+          )}
         </ul>
 
         <div className="navbar-actions-premium">
-          <Link to="/login" className="premium-signin-btn">
-            <span>Sign In</span>
-            <div className="btn-icon">
-              <i className="fas fa-user-circle"></i>
+          {isAuthenticated ? (
+            <div className="user-profile-nav">
+              <div className="user-info-brief">
+                <span className="user-name-nav">{user?.name}</span>
+                <div className="user-avatar-nav">
+                  <i className="fas fa-user"></i>
+                </div>
+              </div>
+              <button onClick={logout} className="logout-nav-btn" title="Logout">
+                <i className="fas fa-sign-out-alt"></i>
+              </button>
             </div>
-          </Link>
+          ) : (
+            <Link to="/login" className="premium-signin-btn">
+              <span>Sign In</span>
+              <div className="btn-icon">
+                <i className="fas fa-user-circle"></i>
+              </div>
+            </Link>
+          )}
         </div>
 
         <button className={`hamburger-premium ${menuOpen ? "active" : ""}`} onClick={toggleMenu}>

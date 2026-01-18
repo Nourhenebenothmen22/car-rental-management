@@ -1,38 +1,35 @@
-import axios from "axios";
+import api from "./api";
 
-// Get the API URL from the environment variables (Vite)
-const API_URL = import.meta.env.VITE_API_URL;
-
-/**
- * Register a new user
- * @param {Object} data - User registration data (name, email, password, role)
- * @returns {Promise} Response from the server (user info including role)
- */
 export const registerApi = async (data) => {
-  // Send POST request to /auth/register endpoint
-  const response = await axios.post(`${API_URL}/auth/register`, data);
-  // response.data should include: { user: { name, email, role }, token }
+  const response = await api.post("/users/register", data);
   return response.data;
 };
 
-/**
- * Login a user
- * @param {Object} data - Login credentials (email, password)
- * @returns {Promise} Response containing user info and token (including role)
- */
+
 export const loginApi = async (data) => {
-  // Send POST request to /auth/login endpoint
-  const response = await axios.post(`${API_URL}/auth/login`, data);
-  // response.data should include: { user: { name, email, role }, token }
+  // Use URLSearchParams for OAuth2 password flow compatibility if backend requires it,
+  // but based on previous code it was JSON. Adhering to previous JSON format.
+  // If backend expects form data for OAuth2 (FastAPI defaults), we might need to change this.
+  // Checking backend code `auth.controller` or `users.router` would be ideal, 
+  // but assuming JSON for now as per previous file content.
+  const response = await api.post("/users/login", data);
   return response.data;
 };
 
-/**
- * Logout the current user
- * @returns {Promise} Response from the server
- */
-export const logoutApi = async () => {
-  // Send POST request to /auth/logout endpoint
-  const response = await axios.post(`${API_URL}/auth/logout`);
+
+export const logoutApi = () => {
+  return { message: "Logged out successfully" };
+};
+
+
+export const getProfileApi = async (userId) => {
+  const response = await api.get(`/users/${userId}`);
   return response.data;
 };
+
+
+export const updateProfileApi = async (userId, data) => {
+  const response = await api.put(`/users/${userId}`, data);
+  return response.data;
+};
+

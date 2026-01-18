@@ -1,12 +1,23 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { dummyMyBookingsData } from '../../assets/assets';
-import './MyBookings.css';
+import { useBookingStore } from '../../store/booking.store';
+import { useAuthStore } from '../../store/auth.store';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
+import { getImageUrl } from '../../services/api';
+import './MyBookings.css'
 
 const MyBookings = () => {
   const [headerRef, headerVisible] = useScrollReveal({ threshold: 0.1 });
   const [gridRef, gridVisible] = useScrollReveal({ threshold: 0.1 });
+  
+  const { user } = useAuthStore();
+  const { userBookings: bookings, loading, fetchUserBookings } = useBookingStore();
+
+  React.useEffect(() => {
+    if (user?.id) {
+        fetchUserBookings(user.id);
+    }
+  }, [user, fetchUserBookings]);
 
   return (
     <div className="my-bookings-page">
@@ -19,54 +30,74 @@ const MyBookings = () => {
         </header>
 
         <div className="bookings-grid" ref={gridRef}>
-          {dummyMyBookingsData.length > 0 ? (
-            dummyMyBookingsData.map((booking, index) => (
+          {loading ? (
+            <div className="loading-state" style={{ textAlign: 'center', padding: '100px 0' }}>
+              <div className="loader"></div>
+              <p style={{ marginTop: '20px', color: '#64748b' }}>Fetching your premium reservations...</p>
+            </div>
+          ) : bookings.length > 0 ? (
+            bookings.map((booking, index) => (
               <div 
-                key={index} 
-                className={`booking-card reveal ${gridVisible ? 'active fade-up' : ''}`} 
+                key={booking.id || index} 
+                className={`booking-card-premium reveal ${gridVisible ? 'active fade-up' : ''}`} 
                 style={{ transitionDelay: `${index * 0.1}s` }}
               >
-                <div className="booking-image">
-                  <img src={booking.car.image} alt={booking.car.brand} />
-                  <div className={`status-badge ${booking.status.toLowerCase()}`}>
-                    {booking.status}
-                  </div>
+                <div className="card-media-sidebar">
+                  <img src={getImageUrl(booking.car?.image)} alt={booking.car?.brand} />
+                  <div className="media-overlay-gradient"></div>
                 </div>
-                
-                <div className="booking-content">
-                  <div className="car-info">
-                    <h3>{booking.car.brand} {booking.car.model}</h3>
-                    <span className="car-category">{booking.car.category}</span>
-                  </div>
 
-                  <div className="booking-details">
-                    <div className="detail-item">
-                      <i className="fas fa-calendar-alt"></i>
-                      <div>
-                        <span>Pickup</span>
-                        <p>{new Date(booking.pickupDate).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}</p>
+                <div className="card-content-body">
+                  <div className="card-top-row">
+                    <div className="car-identity">
+                      <div className="brand-model-row" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <h3>{booking.car?.brand} {booking.car?.model}</h3>
+                        <span className={`status-pill-inline ${booking.status.toLowerCase()}`}>
+                          {booking.status}
+                        </span>
+                      </div>
+                      <span className="booking-ref">#{String(booking.id).slice(-6).toUpperCase()}</span>
+                      <div className="car-badges">
+                        <span className="spec-badge"><i className="fas fa-car"></i> {booking.car?.category}</span>
+                        {booking.car?.transmission && <span className="spec-badge"><i className="fas fa-cog"></i> {booking.car.transmission}</span>}
                       </div>
                     </div>
-                    <div className="detail-item">
-                      <i className="fas fa-calendar-check"></i>
-                      <div>
-                        <span>Return</span>
-                        <p>{new Date(booking.returnDate).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}</p>
+                    <div className="price-display">
+                      <span className="label">Total Paid</span>
+                      <span className="amount">${booking.total_price}</span>
+                    </div>
+                  </div>
+
+                  <div className="travel-timeline">
+                    <div className="timeline-point start">
+                      <div className="date-group">
+                        <span className="label">Pick-up</span>
+                        <span className="date-value">{new Date(booking.pickup_date).toLocaleDateString("fr-FR", { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="timeline-connector">
+                      <div className="line"></div>
+                      <div className="duration-pill">
+                        {Math.ceil(Math.abs(new Date(booking.return_date) - new Date(booking.pickup_date)) / (1000 * 60 * 60 * 24))} Days
+                      </div>
+                    </div>
+
+                    <div className="timeline-point end">
+                      <div className="date-group">
+                        <span className="label">Return</span>
+                        <span className="date-value">{new Date(booking.return_date).toLocaleDateString("fr-FR", { day: 'numeric', month: 'short', year: 'numeric' })}</span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="booking-footer">
-                    <div className="total-price">
-                      <span>Total Amount</span>
-                      <h3>${booking.price}</h3>
-                    </div>
-                    <div className="booking-actions">
-                      <Link to={`/car/${booking.car._id}`} className="btn-secondary">View Details</Link>
-                      {booking.status === 'confirmed' && (
-                        <button className="btn-outline-danger">Cancel</button>
-                      )}
-                    </div>
+                  <div className="card-actions-footer">
+                    <Link to={`/car/${booking.car?.id}`} className="action-btn view">
+                      View Vehicle <i className="fas fa-arrow-right"></i>
+                    </Link>
+                    {booking.status === 'confirmed' && (
+                      <button className="action-btn cancel">Cancel Booking</button>
+                    )}
                   </div>
                 </div>
               </div>
@@ -76,7 +107,7 @@ const MyBookings = () => {
               <i className="fas fa-calendar-times"></i>
               <h3>No Bookings Found</h3>
               <p>You haven't made any reservations yet. Start exploring our fleet!</p>
-              <button className="btn-primary">Browse Cars</button>
+              <Link to="/cars" className="btn-primary-link">Browse Cars</Link>
             </div>
           )}
         </div>

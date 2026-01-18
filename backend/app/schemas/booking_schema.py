@@ -2,6 +2,8 @@ from pydantic import BaseModel, ConfigDict
 from typing import Optional, List
 from datetime import datetime
 
+from app.schemas.car_schema import CarResponse
+
 class BookingBase(BaseModel):
     car_id: int
     pickup_date: datetime
@@ -25,8 +27,6 @@ class BookingResponse(BookingBase):
     owner_id: int
     created_at: datetime
     
-    # Optional relationships to include more data if needed
-    # car: Optional[CarResponse] = None
-    # user: Optional[UserResponse] = None
+    car: Optional[CarResponse] = None
 
     model_config = ConfigDict(from_attributes=True)
